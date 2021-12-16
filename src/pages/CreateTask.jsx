@@ -1,0 +1,37 @@
+import React, {useState} from 'react';
+import { useNavigate } from "react-router-dom";
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
+import TextField from '@mui/material/TextField';
+import Button from "@mui/material/Button";
+import NavBar from '../components/NavBar';
+
+const CreateTask = (props) => {
+    const [title, updateTitle] = useState('')
+    const [description, updateDescription] = useState('')
+    const redirect = useNavigate();
+    const createTaskAndRedirect = () => {
+        props.createTask(title, description)
+        redirect('/');
+    }
+    return (
+        <Container maxWidth="xl">
+            <NavBar />
+            <form onSubmit={createTaskAndRedirect}>
+                <Grid container direction="column" alignItems="center" justify="center" sx={{ marginTop: 5 }} spacing={2}>
+                    <Grid item style={{ width: '70%'}}>
+                        <TextField required onChange={e => updateTitle(e.target.value)} id="outlined-basic" label="Title" style={{width: '100%'}}/>
+                    </Grid>
+                    <Grid item style={{ width: '70%'}}>
+                        <TextField required onChange={e => updateDescription(e.target.value)} id="outlined-basic" label="Desctiption" multiline={true} rows={5} style ={{width: '100%'}}/>
+                    </Grid>
+                    <Grid item style={{ width: '70%'}}>
+                        <Button type="submit" size="small">Create</Button>
+                    </Grid>
+                </Grid>
+            </form>
+        </Container>
+    )
+}
+
+export { CreateTask };
