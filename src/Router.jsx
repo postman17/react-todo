@@ -11,7 +11,7 @@ const Router = (props) => (
             <CreateTask createTask={props.createTask}/>
         </Route>
         <Route path="/">
-          <Index tasks={props.tasks} changeTaskStatus={props.changeTaskStatus} deleteTask={props.deleteTask}/>
+          <Index tasks={props.tasks} changeTaskStatus={props.changeTaskStatus} deleteTask={props.deleteTask} changeFilters={props.changeFilters}/>
         </Route>
       </Switch>
     </BrowserRouter>

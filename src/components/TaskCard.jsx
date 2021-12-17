@@ -21,7 +21,7 @@ const TaskCard = (props) => {
                 {props.description}
             </Typography>
             <Typography variant="body2">
-                {props.created_at}
+                {props.created_at.toLocaleString()}
             </Typography>
           </CardContent>
           <CardActions>
