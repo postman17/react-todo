@@ -41,10 +41,15 @@ const App = () => {
         )
         updateTasks(new_tasks);
     }
+    const deleteTask = (id) => {
+        let new_tasks = tasks.slice();
+        new_tasks.splice(id, 1);
+        updateTasks(new_tasks);
+    }
   return (
     <ThemeProvider theme={themeDark}>
       <CssBaseline />
-      <Router tasks={tasks} changeTaskStatus={changeTaskStatus} createTask={createTask}/>
+      <Router tasks={tasks} changeTaskStatus={changeTaskStatus} createTask={createTask} deleteTask={deleteTask}/>
     </ThemeProvider>
   );
 }

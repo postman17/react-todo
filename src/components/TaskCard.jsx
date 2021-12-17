@@ -26,6 +26,7 @@ const TaskCard = (props) => {
           </CardContent>
           <CardActions>
             <Button size="small" onClick={() => props.changeStatus(props.id)}>Change status</Button>
+            <Button size="small" color="error" onClick={() => props.deleteTask(props.id)}>Delete task</Button>
           </CardActions>
         </Card>
     )

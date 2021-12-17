@@ -13,7 +13,7 @@ const Index = (props) => {
                 {props.tasks.map((item, index)=>{
                     return (
                         <Grid item style={{ width: '70%'}} key={index}>
-                            <TaskCard id={index} changeStatus={props.changeTaskStatus} {...item}/>
+                            <TaskCard id={index} changeStatus={props.changeTaskStatus} deleteTask={props.deleteTask} {...item}/>
                         </Grid>
                     )
                  })}
