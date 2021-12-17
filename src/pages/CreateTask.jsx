@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { useNavigate } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
@@ -9,10 +9,10 @@ import NavBar from '../components/NavBar';
 const CreateTask = (props) => {
     const [title, updateTitle] = useState('')
     const [description, updateDescription] = useState('')
-    const redirect = useNavigate();
+    const history = useHistory();
     const createTaskAndRedirect = () => {
         props.createTask(title, description)
-        redirect('/');
+        history.push('/')
     }
     return (
         <Container maxWidth="xl">
