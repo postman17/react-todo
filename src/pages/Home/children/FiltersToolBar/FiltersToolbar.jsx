@@ -1,11 +1,11 @@
 import * as React from 'react';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import Search from './Search'
-import DateFilter from './DateFilter';
-import StatusFilter from './StatusFilter';
 import Toolbar from '@mui/material/Toolbar';
 import Paper from '@mui/material/Paper';
+import Search from './children/Search'
+import DateFilter from './children/DateFilter';
+import StatusFilter from './children/StatusFilter';
 
 const FiltersToolbar = (props) => {
     return (

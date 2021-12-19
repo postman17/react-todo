@@ -1,14 +1,9 @@
-import { Router } from './Router'
-import { ThemeProvider, createTheme } from "@mui/material/styles";
-import CssBaseline from "@mui/material/CssBaseline";
-import { useState } from "react";
-import { getDate } from './lib/date'
-
-const themeDark = createTheme({
-  palette: {
-    backgroundColor: "#ffffff",
-  }
-});
+import React, { useState } from "react";
+import { getDate } from 'src/lib/date'
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { ContainerWithNavbarLayout } from 'src/ui/layouts/ContainerWithNavbarLayout/ContainerWithNavbarLayout'
+import { Home } from './Home/Home';
+import { CreateTask } from './CreateTask/CreateTask'
 
 const App = () => {
     const [tasks, updateTasks] = useState([
@@ -82,10 +77,20 @@ const App = () => {
         return tasksArray
     }
   return (
-    <ThemeProvider theme={themeDark}>
-      <CssBaseline />
-      <Router tasks={filteredData} changeTaskStatus={changeTaskStatus} createTask={createTask} deleteTask={deleteTask} changeFilters={changeFilters}/>
-    </ThemeProvider>
+    <BrowserRouter>
+      <Switch>
+        <Route path="/create_task">
+            <ContainerWithNavbarLayout>
+                <CreateTask createTask={createTask}/>
+            </ContainerWithNavbarLayout>
+        </Route>
+        <Route path="/">
+            <ContainerWithNavbarLayout>
+                <Home tasks={filteredData} changeTaskStatus={changeTaskStatus} deleteTask={deleteTask} changeFilters={changeFilters}/>
+            </ContainerWithNavbarLayout>
+        </Route>
+      </Switch>
+    </BrowserRouter>
   );
 }
 
