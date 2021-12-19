@@ -3,8 +3,9 @@ import IconButton from "@mui/material/IconButton";
 import SearchIcon from "@mui/icons-material/Search";
 import * as React from "react";
 import { useState } from "react";
+import { setSearchFn } from 'src/models/App/index';
 
-const Search = (props) => {
+const Search = () => {
     const [searchValue, updateSearchValue] = useState('');
     const updateSearchValueByEvent = (e) => {
         updateSearchValue(e.target.value);
@@ -16,7 +17,7 @@ const Search = (props) => {
             placeholder="Search task"
             onChange={updateSearchValueByEvent}
           />
-          <IconButton type="submit" sx={{ p: '10px' }} aria-label="search" onClick={() =>  props.changeFilters({key: 'search', value: searchValue})}>
+          <IconButton type="submit" sx={{ p: '10px' }} aria-label="search" onClick={() => setSearchFn(searchValue)}>
             <SearchIcon />
           </IconButton>
         </>

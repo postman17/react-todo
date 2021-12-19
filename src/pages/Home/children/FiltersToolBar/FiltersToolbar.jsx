@@ -7,14 +7,14 @@ import Search from './children/Search'
 import DateFilter from './children/DateFilter';
 import StatusFilter from './children/StatusFilter';
 
-const FiltersToolbar = (props) => {
+const FiltersToolbar = () => {
     return (
         <LocalizationProvider dateAdapter={AdapterDateFns}>
             <Toolbar disableGutters style={{ width: '50%' }}>
                 <Paper style={{ width: '100%', padding: 11}}>
-                    <Search changeFilters={props.changeFilters}/>
-                    <DateFilter changeFilters={props.changeFilters}/>
-                    <StatusFilter changeFilters={props.changeFilters}/>
+                    <Search />
+                    <DateFilter />
+                    <StatusFilter />
                 </Paper>
             </Toolbar>
         </LocalizationProvider>

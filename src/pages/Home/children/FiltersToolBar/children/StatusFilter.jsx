@@ -3,10 +3,11 @@ import InputLabel from "@mui/material/InputLabel";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import * as React from "react";
+import { setStatusFn } from 'src/models/App/index';
 
-const StatusFilter = (props) => {
+const StatusFilter = () => {
     const handleChange = (e) => {
-        props.changeFilters({key: 'status', value: e.target.value})
+        setStatusFn(e.target.value);
     }
     return (
         <FormControl style={{ width: '20%', marginLeft: 10 }}>

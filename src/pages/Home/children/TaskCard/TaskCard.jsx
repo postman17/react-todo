@@ -3,6 +3,7 @@ import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
+import { changeTaskStatusFn, deleteTaskFn } from 'src/models/App/index'
 
 const TaskCard = (props) => {
     return (
@@ -25,8 +26,8 @@ const TaskCard = (props) => {
             </Typography>
           </CardContent>
           <CardActions>
-            <Button size="small" onClick={() => props.changeStatus(props.id)}>Change status</Button>
-            <Button size="small" color="error" onClick={() => props.deleteTask(props.id)}>Delete task</Button>
+            <Button size="small" onClick={() => changeTaskStatusFn(props.id)}>Change status</Button>
+            <Button size="small" color="error" onClick={() => deleteTaskFn(props.id)}>Delete task</Button>
           </CardActions>
         </Card>
     )

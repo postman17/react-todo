@@ -3,14 +3,19 @@ import { useHistory } from "react-router-dom";
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import Button from "@mui/material/Button";
+import { EMPTY_TASK } from 'src/dict/tasks';
+import { addTaskFn } from 'src/models/App';
 
 const CreateTask = (props) => {
     const [title, updateTitle] = useState('')
     const [description, updateDescription] = useState('')
     const history = useHistory();
     const createTaskAndRedirect = () => {
-        props.createTask(title, description)
-        history.push('/')
+        const task = {...EMPTY_TASK};
+        task.title = title;
+        task.description = description;
+        addTaskFn(task);
+        history.push('/');
     }
     return (
         <form onSubmit={createTaskAndRedirect}>
