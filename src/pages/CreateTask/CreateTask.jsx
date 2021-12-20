@@ -5,8 +5,9 @@ import TextField from '@mui/material/TextField';
 import Button from "@mui/material/Button";
 import { EMPTY_TASK } from 'src/dict/tasks';
 import { addTaskFn } from 'src/models/App';
+import { clearFiltersFn } from 'src/models/App/index';
 
-const CreateTask = (props) => {
+const CreateTask = () => {
     const [title, updateTitle] = useState('')
     const [description, updateDescription] = useState('')
     const history = useHistory();
@@ -16,6 +17,7 @@ const CreateTask = (props) => {
         task.description = description;
         addTaskFn(task);
         history.push('/');
+        clearFiltersFn();
     }
     return (
         <form onSubmit={createTaskAndRedirect}>
