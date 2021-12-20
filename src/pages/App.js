@@ -1,8 +1,8 @@
 import React from "react";
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { ContainerWithNavbarLayout } from 'src/ui/layouts/ContainerWithNavbarLayout/ContainerWithNavbarLayout'
-import { Home } from './Home/Home';
-import { CreateTask } from './CreateTask/CreateTask'
+import { Home } from './children/Home/Home';
+import { CreateTask } from './children/CreateTask/CreateTask'
 
 const App = () => {
   return (
