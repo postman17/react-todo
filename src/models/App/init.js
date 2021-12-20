@@ -1,28 +1,14 @@
 import {forward, sample} from "effector";
 import { EMPTY_TASK } from 'src/dict/tasks';
+import {getDate} from "src/lib/date";
 import {
-    $tasks,
-    addTaskFn,
-    setSearchFn,
-    setDataFn,
-    setStatusFn,
-    $searchStore,
-    $dateStore,
-    $statusStore,
-    changeTaskStatusFn,
-    deleteTaskFn,
-    clearSearchFn,
-    clearDataFn,
-    clearStatusFn,
-    clearFiltersFn,
-    $titleStore,
-    addTitleFn,
-    $descriptionStore,
-    addDescriptionFn,
-    createTaskFn,
-    $tempSearchStore,
-    setTempSearchFn,
-    setTempSearchToSearchFn,
+    $tasks, $searchStore, $dateStore, $statusStore,
+    $descriptionStore, $titleStore, $filteredTasks,
+
+    addTaskFn, setSearchFn, setDataFn, setStatusFn,
+    changeTaskStatusFn, deleteTaskFn, clearSearchFn, clearDataFn,
+    clearStatusFn, clearFiltersFn, addTitleFn, addDescriptionFn,
+    createTaskFn, filterTasksFn
 } from "./index";
 
 $tasks
@@ -42,7 +28,6 @@ $dateStore.on(setDataFn, (_, data) => data).reset(clearDataFn)
 $statusStore.on(setStatusFn, (_, status) => status).reset(clearStatusFn)
 $titleStore.on(addTitleFn, (_, title) => title)
 $descriptionStore.on(addDescriptionFn, (_, description) => description)
-$tempSearchStore.on(setTempSearchFn, (_, search) => search)
 
 forward({
     from: clearFiltersFn,
@@ -52,10 +37,10 @@ forward({
 sample({
     clock: createTaskFn,
     source: [$titleStore, $descriptionStore],
-    fn: (sourceData, _) => {
+    fn: ([title, description], _) => {
         const task = {...EMPTY_TASK};
-        task.title = sourceData[0];
-        task.description = sourceData[1];
+        task.title = title;
+        task.description = description;
         return task
     },
     target: addTaskFn
@@ -67,7 +52,21 @@ forward({
 })
 
 sample({
-    clock: setTempSearchToSearchFn,
-    source: $tempSearchStore,
-    target: setSearchFn
+    clock: [filterTasksFn, $tasks, $dateStore, $statusStore],
+    source: [$tasks, $searchStore, $dateStore, $statusStore],
+    fn: ([tasks, search, date, status], _) => {
+        return tasks.filter((item) => {
+            if (search) {
+                if (!(item.title.includes(search) || item.description.includes(search))) return false
+            }
+            if (date) {
+                if (!(getDate(item.created_at) === getDate(date))) return false
+            }
+            if (status) {
+                if (!(item.status === status)) return false
+            }
+            return true
+        })
+    },
+    target: $filteredTasks
 })

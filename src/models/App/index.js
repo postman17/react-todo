@@ -1,9 +1,6 @@
-import {combine, createDomain} from 'effector';
-import {getDate} from "src/lib/date";
+import {createDomain} from 'effector';
 
-export const appDomain = createDomain('App');
-
-export const $tasks = appDomain.createStore([
+const DEFAULT_TASKS = [
     {
         'title': 'Test',
         'description': 'Description',
@@ -16,11 +13,17 @@ export const $tasks = appDomain.createStore([
         'status': 'Closed',
         'created_at': new Date(),
     }
-], { name: 'tasks' });
+]
+
+export const appDomain = createDomain('App');
+
+export const $tasks = appDomain.createStore(DEFAULT_TASKS, { name: 'tasks' });
+export const $filteredTasks = appDomain.createStore(DEFAULT_TASKS, { name: 'tasks' });
+
 export const $searchStore = appDomain.createStore('', { name: 'searchStore' });
-export const $tempSearchStore = appDomain.createStore('', { name: 'searchStore' });
 export const $dateStore = appDomain.createStore(new Date(), { name: 'dateStore' });
 export const $statusStore = appDomain.createStore(null, { name: 'statusStore' });
+
 export const $titleStore = appDomain.createStore(null, { name: 'titleStore' });
 export const $descriptionStore = appDomain.createStore(null, { name: 'descriptionStore' });
 
@@ -37,28 +40,4 @@ export const clearStatusFn = appDomain.createEvent('clearStatusFn');
 export const clearFiltersFn = appDomain.createEvent('clearFiltersFn');
 export const addTitleFn = appDomain.createEvent('addTitleFn');
 export const addDescriptionFn = appDomain.createEvent('addDescriptionFn');
-export const setTempSearchFn = appDomain.createEvent('setTempSearch');
-export const setTempSearchToSearchFn = appDomain.createEvent('setTempSearchToSearchFn');
-
-export const $filteredTasks = combine($tasks, $searchStore, $dateStore, $statusStore, (tasks, search, date, status) => {
-    let tasksArray = tasks;
-    if (search) {
-        tasksArray = tasksArray.filter((item) => {
-            if (item.title.includes(search) || item.description.includes(search)) return true
-            return false
-        })
-    }
-    if (date) {
-        tasksArray = tasksArray.filter((item) => {
-            if (getDate(item.created_at) === getDate(date)) return true
-            return false
-        })
-    }
-    if (status) {
-        tasksArray = tasksArray.filter((item) => {
-            if (item.status === status) return true
-            return false
-        })
-    }
-    return tasksArray
-})
+export const filterTasksFn = appDomain.createEvent('filterTasks');
