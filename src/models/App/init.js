@@ -1,4 +1,4 @@
-import {forward, guard, sample} from "effector";
+import {forward, sample} from "effector";
 import {getDate} from "src/lib/date";
 
 import {
@@ -7,7 +7,7 @@ import {
 
     addTaskFn, setSearchFn, setDataFn, setStatusFn,
     changeTaskStatusFn, deleteTaskFn, clearSearchFn, clearDataFn,
-    clearStatusFn, clearFiltersFn, filterTasksFn
+    clearStatusFn, clearFiltersFn, filterTasksFn, changeTaskFn
 } from "./index";
 
 $tasks
@@ -22,6 +22,12 @@ $tasks
         newState.splice(id, 1);
         return newState
     })
+    .on(changeTaskFn, (state, id, task) => {
+        let newState = [...state]
+        newState[id] = task
+        return newState
+    })
+
 $searchStore.on(setSearchFn, (_, search) => search).reset(clearSearchFn)
 $dateStore.on(setDataFn, (_, data) => data).reset(clearDataFn)
 $statusStore.on(setStatusFn, (_, status) => status).reset(clearStatusFn)

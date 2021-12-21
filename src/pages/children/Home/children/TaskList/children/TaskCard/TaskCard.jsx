@@ -3,9 +3,14 @@ import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
+import {useHistory} from "react-router-dom";
 import { changeTaskStatusFn, deleteTaskFn } from 'src/models/App/index'
 
 const TaskCard = (props) => {
+    const history = useHistory();
+    const redirectToEdit = (id) => {
+        history.push(`/edit_task/${id}`);
+    }
     return (
         <Card sx={{ minWidth: 275 }}>
           <CardContent>
@@ -26,6 +31,7 @@ const TaskCard = (props) => {
             </Typography>
           </CardContent>
           <CardActions>
+            <Button size="small" onClick={() => redirectToEdit(props.id)}>Edit task</Button>
             <Button size="small" onClick={() => changeTaskStatusFn(props.id)}>Change status</Button>
             <Button size="small" color="error" onClick={() => deleteTaskFn(props.id)}>Delete task</Button>
           </CardActions>

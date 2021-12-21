@@ -28,6 +28,7 @@ export const $statusStore = appDomain.createStore(null, { name: 'statusStore' })
 export const addTaskFn = appDomain.createEvent('addTaskFn');
 export const changeTaskStatusFn = appDomain.createEvent('changeTaskStatusFn');
 export const deleteTaskFn = appDomain.createEvent('deleteTaskFn');
+export const changeTaskFn = appDomain.createEvent('changeTaskFn');
 
 export const setSearchFn = appDomain.createEvent('setSearchFn');
 export const clearSearchFn = appDomain.createEvent('clearSearchFn');

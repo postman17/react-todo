@@ -1,5 +1,6 @@
 import {appDomain} from "src/models/App";
 
+
 export const $titleStore = appDomain.createStore(null, { name: 'titleStore' });
 export const $descriptionStore = appDomain.createStore(null, { name: 'descriptionStore' });
 
@@ -8,7 +9,9 @@ export const $formTitleError = appDomain.createStore('', { name: 'formTitleError
 export const $formDescriptionError = appDomain.createStore('', { name: 'formDescriptionError' });
 
 
-export const createTaskFn = appDomain.createEvent('createTaskFn');
+export const updateTaskFn = appDomain.createEvent('updateTaskFn');
+export const fillTitleAndDescriptionFn = appDomain.createEvent('fillTitleAndDescriptionFn');
+
 export const addTitleFn = appDomain.createEvent('addTitleFn');
 export const addDescriptionFn = appDomain.createEvent('addDescriptionFn');
 export const resetTitleFn = appDomain.createEvent('resetTitleFn');

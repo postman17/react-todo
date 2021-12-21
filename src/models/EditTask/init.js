@@ -1,16 +1,17 @@
 import {forward, guard, sample} from "effector";
-import { checkTitle, checkDescription, titleErrorText, descriptionErrorText } from 'src/helpers/validation';
-import {EMPTY_TASK} from "src/dict/tasks";
-import {addTaskFn, $filteredTasks} from "src/models/App";
+import { spread } from 'patronum/spread';
+import {$filteredTasks, $tasks, changeTaskFn} from "src/models/App";
+import {checkDescription, checkTitle, titleErrorText, descriptionErrorText} from "src/helpers/validation";
 import {
     $descriptionStore, $titleStore, $formButtonVisible,
-    $formTitleError, $formDescriptionError,
+    $formDescriptionError, $formTitleError,
 
-    setTitleErrorFn, createTaskFn, hideButtonFn,
-    resetTitleErrorFn, addTitleFn, addDescriptionFn,
-    setDescriptionErrorFn, resetDescriptionErrorFn, showButtonFn,
-    resetTitleFn, resetDescriptionFn
+    updateTaskFn, fillTitleAndDescriptionFn, addTitleFn,
+    addDescriptionFn, resetTitleFn, resetDescriptionFn,
+    hideButtonFn, resetDescriptionErrorFn, resetTitleErrorFn,
+    setDescriptionErrorFn, setTitleErrorFn, showButtonFn
 } from './index'
+
 
 $titleStore.on(addTitleFn, (_, title) => title).reset(resetTitleFn)
 $descriptionStore.on(addDescriptionFn, (_, description) => description).reset(resetDescriptionFn)
@@ -22,17 +23,35 @@ $formButtonVisible
 $formTitleError.on(setTitleErrorFn, () => titleErrorText).reset(resetTitleErrorFn)
 $formDescriptionError.on(setDescriptionErrorFn, () => descriptionErrorText).reset(resetDescriptionErrorFn)
 
-
 sample({
-    clock: createTaskFn,
-    source: [$titleStore, $descriptionStore],
-    fn: ([title, description], _) => {
-        const task = {...EMPTY_TASK};
+    clock: updateTaskFn,
+    source: [$tasks, $titleStore, $descriptionStore],
+    fn: ([tasks, title, description], id) => {
+        const newTasks = [...tasks];
+        let task = newTasks[id];
         task.title = title;
         task.description = description;
         return task
     },
-    target: addTaskFn
+    target: changeTaskFn
+})
+
+sample({
+    clock: fillTitleAndDescriptionFn,
+    source: $tasks,
+    fn: (tasks, id) => {
+        const task = tasks[id];
+        return {
+            title: task.title,
+            description: task.description
+        }
+    },
+    target: spread({
+        targets: {
+          title: $titleStore,
+          description: $descriptionStore
+        },
+    })
 })
 
 guard({
