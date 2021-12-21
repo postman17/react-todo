@@ -1,14 +1,13 @@
-import {forward, sample} from "effector";
-import { EMPTY_TASK } from 'src/dict/tasks';
+import {forward, guard, sample} from "effector";
 import {getDate} from "src/lib/date";
+
 import {
     $tasks, $searchStore, $dateStore, $statusStore,
-    $descriptionStore, $titleStore, $filteredTasks,
+    $filteredTasks,
 
     addTaskFn, setSearchFn, setDataFn, setStatusFn,
     changeTaskStatusFn, deleteTaskFn, clearSearchFn, clearDataFn,
-    clearStatusFn, clearFiltersFn, addTitleFn, addDescriptionFn,
-    createTaskFn, filterTasksFn
+    clearStatusFn, clearFiltersFn, filterTasksFn
 } from "./index";
 
 $tasks
@@ -26,24 +25,11 @@ $tasks
 $searchStore.on(setSearchFn, (_, search) => search).reset(clearSearchFn)
 $dateStore.on(setDataFn, (_, data) => data).reset(clearDataFn)
 $statusStore.on(setStatusFn, (_, status) => status).reset(clearStatusFn)
-$titleStore.on(addTitleFn, (_, title) => title)
-$descriptionStore.on(addDescriptionFn, (_, description) => description)
+
 
 forward({
     from: clearFiltersFn,
     to: [clearSearchFn, clearDataFn, clearStatusFn],
-})
-
-sample({
-    clock: createTaskFn,
-    source: [$titleStore, $descriptionStore],
-    fn: ([title, description], _) => {
-        const task = {...EMPTY_TASK};
-        task.title = title;
-        task.description = description;
-        return task
-    },
-    target: addTaskFn
 })
 
 forward({
