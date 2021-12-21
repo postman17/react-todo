@@ -12,15 +12,23 @@ import {
     resetTitleFn, resetDescriptionFn
 } from './index'
 
-$titleStore.on(addTitleFn, (_, title) => title).reset(resetTitleFn)
-$descriptionStore.on(addDescriptionFn, (_, description) => description).reset(resetDescriptionFn)
+$titleStore
+    .on(addTitleFn, (_, title) => title)
+    .reset(resetTitleFn)
+$descriptionStore
+    .on(addDescriptionFn, (_, description) => description)
+    .reset(resetDescriptionFn)
 
 $formButtonVisible
     .on(hideButtonFn, (_) => true)
     .on(showButtonFn, (_) => false)
 
-$formTitleError.on(setTitleErrorFn, () => titleErrorText).reset(resetTitleErrorFn)
-$formDescriptionError.on(setDescriptionErrorFn, () => descriptionErrorText).reset(resetDescriptionErrorFn)
+$formTitleError
+    .on(setTitleErrorFn, () => titleErrorText)
+    .reset(resetTitleErrorFn)
+$formDescriptionError
+    .on(setDescriptionErrorFn, () => descriptionErrorText)
+    .reset(resetDescriptionErrorFn)
 
 
 sample({

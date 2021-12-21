@@ -28,9 +28,15 @@ $tasks
         return newState
     })
 
-$searchStore.on(setSearchFn, (_, search) => search).reset(clearSearchFn)
-$dateStore.on(setDataFn, (_, data) => data).reset(clearDataFn)
-$statusStore.on(setStatusFn, (_, status) => status).reset(clearStatusFn)
+$searchStore
+    .on(setSearchFn, (_, search) => search)
+    .reset(clearSearchFn)
+$dateStore
+    .on(setDataFn, (_, data) => data)
+    .reset(clearDataFn)
+$statusStore
+    .on(setStatusFn, (_, status) => status)
+    .reset(clearStatusFn)
 
 
 forward({
