@@ -7,8 +7,8 @@ export const $taskId = taskDomain.createStore('', { name: 'taskId' });
 
 export const $buttonText = taskDomain.createStore('', { name: 'buttonText' });
 
-export const $titleStore = taskDomain.createStore(null, { name: 'titleStore' });
-export const $descriptionStore = taskDomain.createStore(null, { name: 'descriptionStore' });
+export const $titleStore = taskDomain.createStore('', { name: 'titleStore' });
+export const $descriptionStore = taskDomain.createStore('', { name: 'descriptionStore' });
 
 export const $formButtonVisible = taskDomain.createStore(true, { name: 'formButtonVisible' });
 export const $formTitleError = taskDomain.createStore('', { name: 'formTitleError' });

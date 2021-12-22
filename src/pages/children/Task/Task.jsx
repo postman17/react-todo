@@ -15,7 +15,7 @@ const Task = () => {
     useEffect(() => {
         openTaskPageFn(id);
         return () => closeTaskPageFn()
-    }, [])
+    }, [id])
     const isButtonVisible = useStore($formButtonVisible);
     const titleError = useStore($formTitleError);
     const descriptionError = useStore($formDescriptionError);

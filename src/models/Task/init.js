@@ -1,8 +1,9 @@
-import {forward, guard, sample} from "effector";
+import {forward, guard, sample, split} from "effector";
 import {spread} from "patronum/spread";
 import { checkTitle, checkDescription, titleErrorText, descriptionErrorText } from 'src/helpers/validation';
+import {isEmptyString, isTaskIdExist} from 'src/lib/lodash';
 import {EMPTY_TASK} from "src/dict/tasks";
-import {$filteredTasks, $tasks, clearFiltersFn} from "src/models/ToDoList";
+import {$tasks, clearFiltersFn} from "src/models/ToDoList";
 import {pushHistoryFn, notifySuccessFn} from "src/models/App";
 import {
     $descriptionStore, $titleStore, $formButtonVisible,
@@ -53,49 +54,36 @@ forward({
     to: clearFiltersFn
 })
 
-guard({
-    clock: $titleStore,
+split({
     source: $titleStore,
-    filter: title => checkTitle(title),
-    target: setTitleErrorFn,
+    match: title => (checkTitle(title) && !isEmptyString(title)),
+    cases: {
+        true: setTitleErrorFn,
+        false: resetTitleErrorFn
+    }
 })
 
-guard({
-    clock: $titleStore,
-    source: $titleStore,
-    filter: title => !checkTitle(title),
-    target: resetTitleErrorFn,
-})
-
-guard({
-    clock: $descriptionStore,
+split({
     source: $descriptionStore,
-    filter: description => checkDescription(description),
-    target: setDescriptionErrorFn,
+    match: description => (checkDescription(description) && !isEmptyString(description)),
+    cases: {
+        true: setDescriptionErrorFn,
+        false: resetDescriptionErrorFn
+    }
 })
 
-guard({
-    clock: $descriptionStore,
-    source: $descriptionStore,
-    filter: description => !checkDescription(description),
-    target: resetDescriptionErrorFn,
-})
-
-guard({
-    clock: [$titleStore, $descriptionStore],
-    source: [$titleStore, $descriptionStore],
-    filter: ([title, description], _) => (!checkTitle(title) && !checkDescription(description)),
-    target: showButtonFn,
+split({
+    source: sample([$titleStore, $descriptionStore]),
+    match: ([title, description]) => (!checkTitle(title) && !checkDescription(description) && !isEmptyString(title) && !isEmptyString(description)),
+    cases: {
+        true: showButtonFn,
+        false: hideButtonFn
+    }
 })
 
 forward({
     from: [setTitleErrorFn, setDescriptionErrorFn],
     to: hideButtonFn
-})
-
-forward({
-    from: $filteredTasks,
-    to: [resetTitleFn, resetDescriptionFn, hideButtonFn, resetTitleErrorFn, resetDescriptionErrorFn]
 })
 
 guard({
@@ -122,11 +110,6 @@ sample({
     })
 })
 
-forward({
-    from: closeTaskPageFn,
-    to: [resetTitleFn, resetDescriptionFn, hideButtonFn, restTaskIdFn]
-})
-
 sample({
     clock: openTaskPageFn,
     source: $taskId,
@@ -146,11 +129,6 @@ sample({
     target: addTaskFn
 })
 
-forward({
-    from: addTaskFn,
-    to: notifySuccessFn.prepend(() => 'New task created')
-})
-
 sample({
     clock: updateTaskFn,
     source: [$tasks, $titleStore, $descriptionStore, $taskId],
@@ -164,23 +142,28 @@ sample({
     target: changeTaskFn
 })
 
+split({
+    source: sample({source: $taskId, clock: handleTaskFn}),
+    match: id => isTaskIdExist(id),
+    cases: {
+        false: createTaskFn,
+        true: updateTaskFn
+    }
+})
+
+forward({
+    from: addTaskFn,
+    to: notifySuccessFn.prepend(() => 'New task created')
+})
+
 forward({
     from: changeTaskFn,
     to: notifySuccessFn.prepend(() => 'Task updated')
 })
 
-guard({
-    clock: handleTaskFn,
-    source: $taskId,
-    filter: (id) => !id,
-    target: createTaskFn
-})
-
-guard({
-    clock: handleTaskFn,
-    source: $taskId,
-    filter: (id) => id,
-    target: updateTaskFn
+forward({
+    from: closeTaskPageFn,
+    to: [resetTitleFn, resetDescriptionFn, hideButtonFn, restTaskIdFn]
 })
 
 forward({

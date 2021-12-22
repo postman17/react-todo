@@ -1,3 +1,1 @@
-export const getDate = (date) => {
-    return `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`
-}
+export const getDate = (date) => `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
