@@ -3,7 +3,7 @@ import {spread} from "patronum/spread";
 import { checkTitle, checkDescription, titleErrorText, descriptionErrorText } from 'src/helpers/validation';
 import {EMPTY_TASK} from "src/dict/tasks";
 import {$filteredTasks, $tasks, clearFiltersFn} from "src/models/ToDoList";
-import {pushHistoryFn} from "src/models/App";
+import {pushHistoryFn, notifySuccessFn} from "src/models/App";
 import {
     $descriptionStore, $titleStore, $formButtonVisible,
     $formTitleError, $formDescriptionError, $buttonText,
@@ -146,6 +146,11 @@ sample({
     target: addTaskFn
 })
 
+forward({
+    from: addTaskFn,
+    to: notifySuccessFn.prepend(() => 'New task created')
+})
+
 sample({
     clock: updateTaskFn,
     source: [$tasks, $titleStore, $descriptionStore, $taskId],
@@ -157,6 +162,11 @@ sample({
         return task
     },
     target: changeTaskFn
+})
+
+forward({
+    from: changeTaskFn,
+    to: notifySuccessFn.prepend(() => 'Task updated')
 })
 
 guard({

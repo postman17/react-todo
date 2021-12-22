@@ -1,6 +1,6 @@
 import {forward, sample} from "effector";
 import {getDate} from "src/lib/date";
-
+import {notifySuccessFn} from 'src/models/App'
 import {
     $tasks, $searchStore, $dateStore, $statusStore,
     $filteredTasks,
@@ -57,4 +57,14 @@ sample({
         })
     },
     target: $filteredTasks
+})
+
+forward({
+    from: changeTaskStatusFn,
+    to: notifySuccessFn.prepend(() => 'Task status changed')
+})
+
+forward({
+    from: deleteTaskFn,
+    to: notifySuccessFn.prepend(() => 'Task deleted')
 })
