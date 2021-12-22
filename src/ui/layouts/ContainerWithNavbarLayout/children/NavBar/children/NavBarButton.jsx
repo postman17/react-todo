@@ -8,7 +8,7 @@ const NavBarButton = (props) => {
         isButtonDisabled = true;
     }
     return (
-        <Button disabled={isButtonDisabled} color="inherit" component={Link} to={props.path} sx={{ my: 2, color: 'white', display: 'block' }}>{props.name}</Button>
+        <Button disabled={isButtonDisabled} color="inherit" component={Link} to={props.path}>{props.name}</Button>
     )
 }
 
