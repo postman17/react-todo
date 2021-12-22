@@ -1,7 +1,7 @@
 import React from 'react';
 import {useStore} from "effector-react";
 import Grid from "@mui/material/Grid";
-import {$filteredTasks} from 'src/models/App/index'
+import {$filteredTasks} from 'src/models/ToDoList/index'
 import TaskCard from './children/TaskCard/TaskCard'
 
 const TaskList = () => {

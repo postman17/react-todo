@@ -2,29 +2,24 @@ import React from "react";
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { ContainerWithNavbarLayout } from 'src/ui/layouts/ContainerWithNavbarLayout/ContainerWithNavbarLayout'
 import { Home } from './children/Home/Home';
-import { CreateTask } from './children/CreateTask/CreateTask'
-import { EditTask } from './children/EditTask/EditTask'
+import { Task } from './children/Task/Task'
 
 const App = () => {
   return (
     <BrowserRouter>
-      <Switch>
-        <Route path="/create_task">
-            <ContainerWithNavbarLayout>
-                <CreateTask />
-            </ContainerWithNavbarLayout>
-        </Route>
-        <Route path="/edit_task/:id">
-            <ContainerWithNavbarLayout>
-                <EditTask />
-            </ContainerWithNavbarLayout>
-        </Route>
-        <Route path="/">
-            <ContainerWithNavbarLayout>
+        <ContainerWithNavbarLayout>
+          <Switch>
+            <Route path="/create_task">
+                <Task />
+            </Route>
+            <Route path="/edit_task/:id">
+                <Task />
+            </Route>
+            <Route path="/">
                 <Home />
-            </ContainerWithNavbarLayout>
-        </Route>
-      </Switch>
+            </Route>
+          </Switch>
+        </ContainerWithNavbarLayout>
     </BrowserRouter>
   );
 }

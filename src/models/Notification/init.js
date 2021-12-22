@@ -1,5 +1,6 @@
 import {forward, sample} from "effector";
-import {addTaskFn, changeTaskFn, changeTaskStatusFn, deleteTaskFn} from "src/models/App";
+import {changeTaskStatusFn, deleteTaskFn} from "src/models/ToDoList";
+import { addTaskFn, changeTaskFn } from 'src/models/Task';
 import {
     $alertText,
     $isAlertVisible,

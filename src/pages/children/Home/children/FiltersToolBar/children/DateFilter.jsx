@@ -2,7 +2,7 @@ import * as React from "react";
 import {useStore} from "effector-react";
 import DesktopDatePicker from "@mui/lab/DesktopDatePicker";
 import TextField from "@mui/material/TextField";
-import {$dateStore, setDataFn} from 'src/models/App/index';
+import {$dateStore, setDataFn} from 'src/models/ToDoList/index';
 
 const DateFilter = () => {
     const date = useStore($dateStore)

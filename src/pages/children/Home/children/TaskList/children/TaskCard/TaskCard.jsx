@@ -4,7 +4,7 @@ import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import {useHistory} from "react-router-dom";
-import { changeTaskStatusFn, deleteTaskFn } from 'src/models/App/index'
+import { changeTaskStatusFn, deleteTaskFn } from 'src/models/ToDoList/index'
 
 const TaskCard = (props) => {
     const history = useHistory();

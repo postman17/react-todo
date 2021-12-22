@@ -1,4 +1,4 @@
 import './App/init';
-import './CreateTask/init';
-import './EditTask/init';
+import './ToDoList/init';
+import './Task/init';
 import './Notification/init';

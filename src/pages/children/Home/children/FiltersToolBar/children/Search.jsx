@@ -2,7 +2,7 @@ import * as React from "react";
 import InputBase from "@mui/material/InputBase";
 import IconButton from "@mui/material/IconButton";
 import SearchIcon from "@mui/icons-material/Search";
-import {setSearchFn, filterTasksFn} from 'src/models/App/index';
+import {setSearchFn, filterTasksFn} from 'src/models/ToDoList/index';
 
 const Search = () => (
         <>
