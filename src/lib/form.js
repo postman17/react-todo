@@ -1,0 +1,1 @@
+export const minLength = (value, min) => value.length >= min

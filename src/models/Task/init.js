@@ -1,20 +1,15 @@
 import {forward, guard, sample, split} from "effector";
 import {spread} from "patronum/spread";
-import { checkTitle, checkDescription, titleErrorText, descriptionErrorText } from 'src/helpers/validation';
-import {isEmptyString, isTaskIdExist} from 'src/lib/lodash';
+import {isTaskIdExist} from 'src/lib/lodash';
 import {EMPTY_TASK} from "src/dict/tasks";
 import {$tasks, clearFiltersFn} from "src/models/ToDoList";
 import {pushHistoryFn, notifySuccessFn} from "src/models/App";
 import {
-    $descriptionStore, $titleStore, $formButtonVisible,
-    $formTitleError, $formDescriptionError, $buttonText,
-    $taskId,
-    setTitleErrorFn, createTaskFn, hideButtonFn,
-    resetTitleErrorFn, addTitleFn, addDescriptionFn,
-    setDescriptionErrorFn, resetDescriptionErrorFn, showButtonFn,
-    resetTitleFn, resetDescriptionFn, addTaskIdFn, addTaskFn,
+    $descriptionStore, $titleStore, $taskId,
+    createTaskFn, addTaskIdFn, addTaskFn,
     changeTaskFn, handleTaskFn, updateTaskFn, openTaskPageFn,
-    closeTaskPageFn, restTaskIdFn
+    closeTaskPageFn, restTaskIdFn,
+    taskForm
 } from './index'
 
 
@@ -26,24 +21,6 @@ $tasks
         return newState
     })
 
-$titleStore
-    .on(addTitleFn, (_, title) => title)
-    .reset(resetTitleFn)
-$descriptionStore
-    .on(addDescriptionFn, (_, description) => description)
-    .reset(resetDescriptionFn)
-
-$formButtonVisible
-    .on(hideButtonFn, (_) => true)
-    .on(showButtonFn, (_) => false)
-
-$formTitleError
-    .on(setTitleErrorFn, () => titleErrorText)
-    .reset(resetTitleErrorFn)
-$formDescriptionError
-    .on(setDescriptionErrorFn, () => descriptionErrorText)
-    .reset(resetDescriptionErrorFn)
-
 $taskId
     .on(addTaskIdFn, (_, value) => value)
     .reset(restTaskIdFn)
@@ -52,38 +29,6 @@ $taskId
 forward({
     from: addTaskFn,
     to: clearFiltersFn
-})
-
-split({
-    source: $titleStore,
-    match: title => (checkTitle(title) && !isEmptyString(title)),
-    cases: {
-        true: setTitleErrorFn,
-        false: resetTitleErrorFn
-    }
-})
-
-split({
-    source: $descriptionStore,
-    match: description => (checkDescription(description) && !isEmptyString(description)),
-    cases: {
-        true: setDescriptionErrorFn,
-        false: resetDescriptionErrorFn
-    }
-})
-
-split({
-    source: sample([$titleStore, $descriptionStore]),
-    match: ([title, description]) => (!checkTitle(title) && !checkDescription(description) && !isEmptyString(title) && !isEmptyString(description)),
-    cases: {
-        true: showButtonFn,
-        false: hideButtonFn
-    }
-})
-
-forward({
-    from: [setTitleErrorFn, setDescriptionErrorFn],
-    to: hideButtonFn
 })
 
 guard({
@@ -108,13 +53,6 @@ sample({
           description: $descriptionStore
         },
     })
-})
-
-sample({
-    clock: openTaskPageFn,
-    source: $taskId,
-    fn: (_, id) => (!id ? 'Create': 'Update'),
-    target: $buttonText
 })
 
 sample({
@@ -163,7 +101,7 @@ forward({
 
 forward({
     from: closeTaskPageFn,
-    to: [resetTitleFn, resetDescriptionFn, hideButtonFn, restTaskIdFn]
+    to: taskForm.reset
 })
 
 forward({

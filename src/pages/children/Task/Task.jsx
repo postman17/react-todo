@@ -1,13 +1,15 @@
 import React, {useEffect} from "react";
 import {useStore} from "effector-react";
+import {useForm} from "effector-forms";
 import { useParams } from "react-router-dom";
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
+import {isTaskIdExist} from 'src/lib/lodash';
 import {
-    $formButtonVisible, $formDescriptionError, $formTitleError,
-    $buttonText, $descriptionStore, $titleStore,
-    addDescriptionFn, addTitleFn, handleTaskFn, openTaskPageFn, closeTaskPageFn
+    $isTaskFormValid,
+    openTaskPageFn, closeTaskPageFn,
+    taskForm
 } from "src/models/Task";
 
 const Task = () => {
@@ -16,43 +18,44 @@ const Task = () => {
         openTaskPageFn(id);
         return () => closeTaskPageFn()
     }, [id])
-    const isButtonVisible = useStore($formButtonVisible);
-    const titleError = useStore($formTitleError);
-    const descriptionError = useStore($formDescriptionError);
-    const buttonText = useStore($buttonText);
-    const title = useStore($titleStore);
-    const description = useStore($descriptionStore);
+    const { submit, fields, eachValid, hasError, errorText } = useForm(taskForm)
+    const isTaskFormValid = useStore($isTaskFormValid);
+    const buttonText = isTaskIdExist(id)? 'Update' : 'Create'
+    const onSubmit = (e) => {
+        e.preventDefault()
+        submit()
+    }
     return (
-        <form onSubmit={handleTaskFn}>
+        <form onSubmit={onSubmit}>
             <Grid container direction="column" alignItems="center" justify="center" sx={{ marginTop: 5 }} spacing={2}>
                 <Grid item style={{ width: '70%'}}>
                     <TextField
-                        required
-                        value={title}
-                        error={titleError}
-                        onChange={addTitleFn.prepend(e => e.target.value)}
+                        value={fields.title.value}
+                        error={hasError("title")}
+                        onBlur={() => fields.title.onBlur()}
+                        onChange={(e) => fields.title.onChange(e.target.value)}
                         id="outlined-basic"
                         label="Title"
                         style={{width: '100%'}}
-                        helperText={titleError}
+                        helperText={errorText("title")}
                     />
                 </Grid>
                 <Grid item style={{ width: '70%'}}>
                     <TextField
-                        required
-                        value={description}
-                        error={descriptionError}
-                        onChange={addDescriptionFn.prepend(e => e.target.value)}
+                        value={fields.description.value}
+                        error={hasError("description")}
+                        onBlur={() => fields.description.onBlur()}
+                        onChange={(e) => fields.description.onChange(e.target.value)}
                         id="outlined-basic"
                         label="Description"
                         multiline={true}
                         rows={5}
                         style ={{width: '100%'}}
-                        helperText={descriptionError}
+                        helperText={errorText("description")}
                     />
                 </Grid>
                 <Grid item style={{ width: '70%'}}>
-                    <Button disabled={isButtonVisible} type="submit" size="small">{buttonText}</Button>
+                    <Button disabled={!isTaskFormValid} type="submit" size="small">{buttonText}</Button>
                 </Grid>
             </Grid>
         </form>
