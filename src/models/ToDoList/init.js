@@ -2,13 +2,18 @@ import {forward, sample} from "effector";
 import {getDate} from "src/lib/date";
 import {notifySuccessFn} from 'src/models/App'
 import {
+    filtersDomain,
     $tasks, $searchStore, $dateStore, $statusStore,
     $filteredTasks,
-
     setSearchFn, setDataFn, setStatusFn,
-    changeTaskStatusFn, deleteTaskFn, clearSearchFn, clearDataFn,
-    clearStatusFn, clearFiltersFn, filterTasksFn
+    changeTaskStatusFn, deleteTaskFn, clearFiltersFn,
+    filterTasksFn
 } from "./index";
+
+
+filtersDomain.onCreateStore(store => {
+    store.reset(clearFiltersFn);
+})
 
 $tasks
     .on(changeTaskStatusFn, (state, id) => {
@@ -22,21 +27,9 @@ $tasks
         return newState
     })
 
-$searchStore
-    .on(setSearchFn, (_, search) => search)
-    .reset(clearSearchFn)
-$dateStore
-    .on(setDataFn, (_, data) => data)
-    .reset(clearDataFn)
-$statusStore
-    .on(setStatusFn, (_, status) => status)
-    .reset(clearStatusFn)
-
-
-forward({
-    from: clearFiltersFn,
-    to: [clearSearchFn, clearDataFn, clearStatusFn],
-})
+$searchStore.on(setSearchFn, (_, search) => search)
+$dateStore.on(setDataFn, (_, data) => data)
+$statusStore.on(setStatusFn, (_, status) => status)
 
 
 sample({
