@@ -18,7 +18,7 @@ const Task = () => {
         openTaskPageFn(id);
         return () => closeTaskPageFn()
     }, [id])
-    const { submit, fields, eachValid, hasError, errorText } = useForm(taskForm)
+    const { submit, fields, hasError, errorText } = useForm(taskForm)
     const isTaskFormValid = useStore($isTaskFormValid);
     const buttonText = isTaskIdExist(id)? 'Update' : 'Create'
     const onSubmit = (e) => {
